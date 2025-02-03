@@ -1,0 +1,41 @@
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+  with_items:
+    - /opt/containers
+    - /opt/containers/loki
+    - /opt/containers/loki/persist
+    - /opt/writer
+
+- name: Disable SELinux (for dev box to start rsyslogd)
+  shell: setenforce 0
+
+- name: Install rsyslog conf file
+  copy:
+    src: test.conf
+    dest: /etc/rsyslog.d/test.conf
+
+- name: rsyslog restarted
+  service:
+    name: rsyslog
+    state: restarted
+
+- name: Install promtail config
+  copy:
+    src: config.yml.promtail
+    dest: /opt/containers/loki/persist/config.yml
+
+- name: Install docker compose - Loki and Promtail
+  copy:
+    src: docker-compose.yml
+    dest: /opt/containers/loki/docker-compose.yml
+
+- name: Install writer program
+  copy:
+    src: writer.py
+    dest: /opt/writer/writer.py
+    mode: 0755
+
