@@ -1,4 +1,4 @@
-A simple role to add the following to a server:
+A simple Ansible role to add the following to a server:
 
 - Configure rsyslog to bind to a socket file
 - A small python program to write data to the socket file
@@ -9,5 +9,8 @@ A simple role to add the following to a server:
 The point of this is just to prove, and to record that log data being written to a 
 socket file can be forwarded to Loki.  Rsyslog can also dual route that data to 
 other log destinations. 
+
+At the moment it disables SELinux else Rsyslog fails to restart (on Rocky 9). Not
+an issue for this little role as I run it against a test VM. 
 
 
